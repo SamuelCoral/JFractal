@@ -99,7 +99,7 @@ public class PantallaFractales extends JFrame {
                 if(e.getKeyCode() == KeyEvent.VK_PLUS) { iteraciones += e.isShiftDown() ? e.isControlDown() ? e.isAltDown() ? 500 : 50 : 10 : 1; repaint(); }
                 if(e.getKeyCode() == KeyEvent.VK_MINUS) { iteraciones -= e.isShiftDown() ? e.isControlDown() ? e.isAltDown() ? 500 : 50 : 10 : 1; repaint(); }
                 if(e.getKeyCode() == KeyEvent.VK_P) {
-
+                    
                     try {
                         
                         setTitle(nombre + " - Guardando - " + String.valueOf(iteraciones) + " iteraciones");
@@ -107,7 +107,7 @@ public class PantallaFractales extends JFrame {
                         Thread hiloGuardar = new DibujarMandelbrot(guardar.createGraphics(), getSize(), x1, y1, pixelesXUnidad, iteraciones, paleta);
                         hiloGuardar.start();
                         hiloGuardar.join();
-                        ImageIO.write(guardar, "png", new File(new SimpleDateFormat("dd-MM-yyyy_HH-mm-ss").format(new java.util.Date()) + ".png"));
+                        ImageIO.write(guardar, "png", new File(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new java.util.Date()) + ".png"));
                         setTitle(nombre + " - " + String.valueOf(iteraciones) + " iteraciones");
                     }
                     catch(IOException | InterruptedException ex) {
@@ -123,18 +123,18 @@ public class PantallaFractales extends JFrame {
             public void mouseWheelMoved(MouseWheelEvent e) {
                 
                 if(e.getWheelRotation() < 0) {
-
+                    
                     pixelesXUnidad = pixelesXUnidad * 3 / 2;
                     x1 += (((double)e.getX() / getWidth()) / 2) * ((double)getWidth() / pixelesXUnidad);
                     y1 += (((double)e.getY() / getHeight()) / 2) * ((double)getHeight() / pixelesXUnidad);
                 }
                 else {
-
+                    
                     x1 -= (((double)e.getX() / getWidth()) / 2) * ((double)getWidth() / pixelesXUnidad);
                     y1 -= (((double)e.getY() / getHeight()) / 2) * ((double)getHeight() / pixelesXUnidad);
                     pixelesXUnidad = pixelesXUnidad * 2 / 3;
                 }
-
+                
                 repaint();
             }
         });
