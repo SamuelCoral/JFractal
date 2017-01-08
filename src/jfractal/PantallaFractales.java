@@ -41,7 +41,8 @@ public class PantallaFractales extends JFrame {
     }
     
     long pixelesXUnidad = 200, iteraciones = 50;
-    double x1 = -2d, y1 = -1;
+    double x1 = -2, y1 = -1;
+    boolean dibujarCoordenadas = true;
     String nombre = "Mandelbrot";
     Thread hiloDibujar;
     Color[] paleta;
@@ -79,7 +80,7 @@ public class PantallaFractales extends JFrame {
                 System.err.println(ex);
             }
         }
-        hiloDibujar = new DibujarMandelbrot((Graphics2D)getGraphics(), getSize(), x1, y1, pixelesXUnidad, iteraciones, paleta);
+        hiloDibujar = new DibujarMandelbrot((Graphics2D)getGraphics(), getSize(), x1, y1, pixelesXUnidad, iteraciones, paleta, dibujarCoordenadas);
         hiloDibujar.start();
     }
     
@@ -104,7 +105,7 @@ public class PantallaFractales extends JFrame {
                         
                         setTitle(nombre + " - Guardando - " + String.valueOf(iteraciones) + " iteraciones");
                         BufferedImage guardar = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-                        Thread hiloGuardar = new DibujarMandelbrot(guardar.createGraphics(), getSize(), x1, y1, pixelesXUnidad, iteraciones, paleta);
+                        Thread hiloGuardar = new DibujarMandelbrot(guardar.createGraphics(), getSize(), x1, y1, pixelesXUnidad, iteraciones, paleta, dibujarCoordenadas);
                         hiloGuardar.start();
                         hiloGuardar.join();
                         ImageIO.write(guardar, "png", new File(new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new java.util.Date()) + ".png"));
@@ -113,6 +114,26 @@ public class PantallaFractales extends JFrame {
                     catch(IOException | InterruptedException ex) {
                         
                         System.err.println(ex.getMessage());
+                    }
+                }
+                if(e.getKeyCode() == KeyEvent.VK_H) { dibujarCoordenadas = !dibujarCoordenadas; repaint(); }
+                if(e.getKeyCode() == KeyEvent.VK_I) {
+                    
+                    try {
+                        
+                        double nuevoX1 = Double.parseDouble(JOptionPane.showInputDialog("Coordenada en X", x1));
+                        double nuevoY1 = Double.parseDouble(JOptionPane.showInputDialog("Coordenada en Y", y1));
+                        long nuevoPixelesXUnidad = Long.parseLong(JOptionPane.showInputDialog("Pixeles por unidad", pixelesXUnidad));
+                        long nuevoIteraciones = Long.parseLong(JOptionPane.showInputDialog("Iteraciones", iteraciones));
+                        
+                        x1 = nuevoX1;
+                        y1 = nuevoY1;
+                        pixelesXUnidad = nuevoPixelesXUnidad;
+                        iteraciones = nuevoIteraciones;
+                        repaint();
+                    }
+                    catch(NumberFormatException | NullPointerException ex) {
+                        
                     }
                 }
             }
